@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BALO & PHINIX - البكالوريا 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #f5c842;
+    --gold2: #e8a800;
+    --deep: #0a0a1a;
+    --dark: #0f0f2e;
+    --mid: #1a1a4e;
+    --accent: #6c63ff;
+    --accent2: #ff6b6b;
+    --white: #ffffff;
+    --glow: 0 0 30px rgba(245, 200, 66, 0.5);
+    /* Phinix colors */
+    --phoenix: #ff4e00;
+    --phoenix2: #ff8c00;
+    --phoenix-glow: 0 0 30px rgba(255, 78, 0, 0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--deep);
+    color: var(--white);
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== STARS BACKGROUND ===== */
+  #stars-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ===== HERO DUO ===== */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    gap: 1rem;
+  }
+
+  .hero-duo {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .hero-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .vs-badge {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(255,255,255,0.2);
+    align-self: center;
+    letter-spacing: -2px;
+  }
+
+  .crown {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(var(--glow));
+  }
+
+  .crown.phoenix-crown {
+    animation-delay: -1.5s;
+    filter: drop-shadow(var(--phoenix-glow));
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+
+  .hero-name {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 7.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--gold), #fff, var(--gold2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    letter-spacing: -2px;
+    animation: nameReveal 1.2s cubic-bezier(.16,1,.3,1) both;
+  }
+
+  .hero-name.phinix {
+    background: linear-gradient(135deg, var(--phoenix), #fff, var(--phoenix2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation-delay: 0.2s;
+  }
+
+  @keyframes nameReveal {
+    from { opacity: 0; transform: scale(0.7) translateY(40px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .hero-tag {
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    border: 1px solid;
+  }
+
+  .hero-tag.balo-tag {
+    color: var(--gold);
+    border-color: rgba(245,200,66,0.4);
+    background: rgba(245,200,66,0.08);
+  }
+
+  .hero-tag.phinix-tag {
+    color: var(--phoenix);
+    border-color: rgba(255,78,0,0.4);
+    background: rgba(255,78,0,0.08);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: rgba(255,255,255,0.7);
+    animation: fadeUp 1.4s 0.4s both;
+  }
+
+  /* Divider */
+  .duo-divider {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 1rem 2rem 0;
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 3px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Phinix tip card accent */
+  .tip-card.phinix-tip:hover {
+    border-color: var(--phoenix);
+    background: linear-gradient(145deg, rgba(255,78,0,0.08), rgba(255,140,0,0.05));
+    box-shadow: 0 12px 40px rgba(255,78,0,0.15);
+  }
+
+  .tip-card.phinix-tip .tip-title { color: var(--phoenix2); }
+
+  /* ===== COUNTDOWN ===== */
+  .countdown-section {
+    position: relative;
+    z-index: 1;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .countdown-label {
+    font-size: 1.1rem;
+    color: var(--gold);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    font-weight: 700;
+  }
+
+  .countdown-grid {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .countdown-box {
+    background: linear-gradient(145deg, rgba(108,99,255,0.25), rgba(108,99,255,0.05));
+    border: 2px solid rgba(245, 200, 66, 0.3);
+    border-radius: 20px;
+    padding: 1.5rem 2rem;
+    min-width: 110px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(108,99,255,0.2);
+    transition: transform 0.3s;
+  }
+
+  .countdown-box:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold);
+    box-shadow: var(--glow);
+  }
+
+  .countdown-num {
+    font-family: 'Tajawal', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    text-shadow: var(--glow);
+    transition: transform 0.3s;
+  }
+
+  .countdown-num.flip {
+    animation: flip 0.4s ease;
+  }
+
+  @keyframes flip {
+    0% { transform: scaleY(1); }
+    50% { transform: scaleY(0); }
+    100% { transform: scaleY(1); }
+  }
+
+  .countdown-unit {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.6);
+    margin-top: 0.3rem;
+    letter-spacing: 2px;
+  }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-section {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+    padding: 0 2rem;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+
+  .progress-label {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .progress-pct {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .progress-track {
+    background: rgba(255,255,255,0.08);
+    border-radius: 50px;
+    height: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 50px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent2));
+    background-size: 200% 100%;
+    animation: progressAnim 2s ease-out both, shimmer 2s 2s linear infinite;
+    width: 0%;
+    transition: width 2s cubic-bezier(.16,1,.3,1);
+  }
+
+  @keyframes progressAnim {
+    from { width: 0%; }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* ===== QUOTE ===== */
+  .quote-section {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+  }
+
+  .quote-card {
+    background: linear-gradient(135deg, rgba(245,200,66,0.08), rgba(108,99,255,0.08));
+    border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 24px;
+    padding: 2.5rem 2rem;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quote-card::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    right: 20px;
+    font-size: 10rem;
+    color: rgba(245,200,66,0.06);
+    font-family: Georgia, serif;
+    line-height: 1;
+  }
+
+  .quote-text {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 600;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.9);
+    position: relative;
+    z-index: 1;
+    transition: all 0.5s ease;
+  }
+
+  .quote-text.changing {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  .quote-author {
+    margin-top: 1rem;
+    color: var(--gold);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  /* ===== TIPS ===== */
+  .tips-section {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto 4rem;
+    padding: 0 2rem;
+  }
+
+  .section-title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    letter-spacing: 2px;
+  }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tip-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 1.8rem;
+    transition: all 0.3s ease;
+    cursor: default;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  .tip-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .tip-card:hover {
+    border-color: var(--gold);
+    background: linear-gradient(145deg, rgba(245,200,66,0.08), rgba(108,99,255,0.05));
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(245,200,66,0.15);
+  }
+
+  .tip-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+  .tip-title { font-size: 1.05rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+  .tip-body { font-size: 0.9rem; color: rgba(255,255,255,0.7); line-height: 1.7; }
+
+  /* ===== BIG MESSAGE ===== */
+  .message-section {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(180deg, transparent, rgba(108,99,255,0.1), transparent);
+  }
+
+  .message-text {
+    font-family: 'Tajawal', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #fff 0%, var(--gold) 50%, #fff 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShine 3s linear infinite;
+  }
+
+  @keyframes textShine {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+  }
+
+  /* ===== FIREWORKS BUTTON ===== */
+  .fire-btn {
+    position: relative;
+    z-index: 1;
+    display: block;
+    margin: 2rem auto 4rem;
+    padding: 1.2rem 3rem;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--deep);
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 8px 30px rgba(245,200,66,0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+  }
+
+  .fire-btn:hover {
+    transform: scale(1.07);
+    box-shadow: 0 12px 50px rgba(245,200,66,0.6);
+  }
+
+  .fire-btn:active { transform: scale(0.97); }
+
+  /* ===== FIREWORKS CANVAS ===== */
+  #fireworks-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  /* Particles */
+  .particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: particleDrift linear infinite;
+  }
+
+  @keyframes particleDrift {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+<canvas id="fireworks-canvas"></canvas>
+
+<!-- HERO DUO -->
+<section class="hero">
+  <div class="hero-duo">
+    <div class="hero-card">
+      <div class="crown">👑</div>
+      <h1 class="hero-name">BALO</h1>
+      <span class="hero-tag balo-tag">⭐ البطل الذهبي</span>
+    </div>
+    <div class="vs-badge">&amp;</div>
+    <div class="hero-card">
+      <div class="crown phoenix-crown">🔥</div>
+      <h1 class="hero-name phinix">PHINIX</h1>
+      <span class="hero-tag phinix-tag">🦅 طائر الفينيق</span>
+    </div>
+  </div>
+  <p class="hero-sub">🇹🇳 معاً نحو البكالوريا 2026 — لا شيء يوقفكم!</p>
+</section>
+
+<!-- COUNTDOWN -->
+<section class="countdown-section">
+  <div class="countdown-label">⏳ الوقت المتبقي على الامتحانات</div>
+  <div class="countdown-grid">
+    <div class="countdown-box">
+      <div class="countdown-num" id="cd-days">20</div>
+      <div class="countdown-unit">يوم</div>
+    </div>
+    <div class="countdown-box">
+      <div class="countdown-num" id="cd-hours">00</div>
+      <div class="countdown-unit">ساعة</div>
+    </div>
+    <div class="countdown-box">
+      <div class="countdown-num" id="cd-mins">00</div>
+      <div class="countdown-unit">دقيقة</div>
+    </div>
+    <div class="countdown-box">
+      <div class="countdown-num" id="cd-secs">00</div>
+      <div class="countdown-unit">ثانية</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRESS -->
+<section class="progress-section">
+  <div class="progress-header">
+    <span class="progress-label">🔥 تقدّمك نحو البكالوريا</span>
+    <span class="progress-pct" id="progress-pct">0%</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill"></div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-section">
+  <div class="quote-card">
+    <p class="quote-text" id="quote-text">النجاح ليس نهاية الطريق، والفشل ليس نهاية المشوار — الشجاعة هي الاستمرار.</p>
+    <p class="quote-author" id="quote-author">— وينستون تشرشل</p>
+  </div>
+</section>
+
+<!-- TIPS -->
+<section class="tips-section">
+  <div class="section-title">💡 نصائح لباللو و phinix قبل الامتحان</div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-icon">📚</div>
+      <div class="tip-title">المراجعة الذكية</div>
+      <div class="tip-body">ركّز على الفصول المهمة وراجع الملخصات بدل قراءة الكل من الأول. جودة المراجعة أهم من كميتها.</div>
+    </div>
+    <div class="tip-card phinix-tip">
+      <div class="tip-icon">🦅</div>
+      <div class="tip-title">قوة الفينيق</div>
+      <div class="tip-body">phinix — الفينيق يُولد من الرماد. كل لحظة صعبة في المراجعة هي وقود لنجاحك يوم الامتحان.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">😴</div>
+      <div class="tip-title">النوم سلاحك السري</div>
+      <div class="tip-body">النوم 7-8 ساعات يساعد الدماغ على حفظ المعلومات. لا تسهروا وتخسروا تعبكم في آخر ليلة!</div>
+    </div>
+    <div class="tip-card phinix-tip">
+      <div class="tip-icon">🤝</div>
+      <div class="tip-title">قوة الثنائي</div>
+      <div class="tip-body">باللو و phinix معاً أقوى من أي واحد لوحده. راجعوا سوا، اشرحوا لبعض — التعليم المتبادل يرسّخ المعلومة.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">⏱️</div>
+      <div class="tip-title">تقنية بومودورو</div>
+      <div class="tip-body">اشتغلوا 25 دقيقة، ارتاحوا 5 دقائق. بعد 4 جلسات خذوا استراحة كبيرة. إنتاجيتكم ستتضاعف.</div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-icon">🎯</div>
+      <div class="tip-title">يوم الامتحان</div>
+      <div class="tip-body">اقرأوا الأسئلة كاملة أولاً. ابدأوا بما تعرفونه. راجعوا الإجابات في الأخير. أنتم جاهزون!</div>
+    </div>
+  </div>
+</section>
+
+<!-- BIG MESSAGE -->
+<section class="message-section">
+  <p class="message-text">
+    باللو و phinix، أنتم أقوى مما تتخيلون.<br>
+    معاً لا يوجد امتحان يقدر عليكم.<br>
+    اجعلوها لحظة انتصار للاثنين! 🏆🔥
+  </p>
+</section>
+
+<!-- BUTTON -->
+<button class="fire-btn" onclick="launchFireworks()">🎆 أطلق الألعاب النارية لباللو و phinix!</button>
+
+<footer>
+  ❤️ صُنع بالمحبة لباللو و phinix — البكالوريا 2026 • تونس
+</footer>
+
+<script>
+// ===== STARS =====
+const starsCanvas = document.getElementById('stars-canvas');
+const sCtx = starsCanvas.getContext('2d');
+let stars = [];
+
+function resizeStars() {
+  starsCanvas.width = window.innerWidth;
+  starsCanvas.height = window.innerHeight;
+  stars = Array.from({length: 180}, () => ({
+    x: Math.random() * starsCanvas.width,
+    y: Math.random() * starsCanvas.height,
+    r: Math.random() * 1.5 + 0.3,
+    a: Math.random(),
+    da: (Math.random() - 0.5) * 0.005
+  }));
+}
+
+function drawStars() {
+  sCtx.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+  stars.forEach(s => {
+    s.a = Math.max(0.1, Math.min(1, s.a + s.da));
+    if (s.a <= 0.1 || s.a >= 1) s.da *= -1;
+    sCtx.beginPath();
+    sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    sCtx.fillStyle = `rgba(255,255,255,${s.a})`;
+    sCtx.fill();
+  });
+  requestAnimationFrame(drawStars);
+}
+
+resizeStars();
+drawStars();
+window.addEventListener('resize', resizeStars);
+
+// ===== COUNTDOWN =====
+// Set exam date 20 days from now
+const examDate = new Date();
+examDate.setDate(examDate.getDate() + 20);
+examDate.setHours(8, 0, 0, 0);
+
+function updateCountdown() {
+  const now = new Date();
+  const diff = examDate - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '0';
+    document.getElementById('cd-hours').textContent = '0';
+    document.getElementById('cd-mins').textContent = '0';
+    document.getElementById('cd-secs').textContent = '0';
+    return;
+  }
+  const days = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins = Math.floor((diff % 3600000) / 60000);
+  const secs = Math.floor((diff % 60000) / 1000);
+
+  const setVal = (id, val) => {
+    const el = document.getElementById(id);
+    const newVal = String(val).padStart(2, '0');
+    if (el.textContent !== newVal) {
+      el.classList.add('flip');
+      setTimeout(() => { el.textContent = newVal; el.classList.remove('flip'); }, 200);
+    }
+  };
+
+  setVal('cd-days', days);
+  setVal('cd-hours', hours);
+  setVal('cd-mins', mins);
+  setVal('cd-secs', secs);
+
+  // Progress: assume 30 days total prep, 20 remaining = 10/30 done
+  const totalDays = 30;
+  const elapsed = totalDays - days;
+  const pct = Math.min(100, Math.round((elapsed / totalDays) * 100));
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+// ===== QUOTES =====
+const quotes = [
+  { text: "النجاح ليس نهاية الطريق، والفشل ليس نهاية المشوار — الشجاعة هي الاستمرار.", author: "وينستون تشرشل" },
+  { text: "العبقرية 1% إلهام و99% عرق جبين.", author: "توماس إديسون" },
+  { text: "لا تخف من الفشل. خف من عدم المحاولة.", author: "مجهول" },
+  { text: "باللو، أنت لست وحدك — phinix بجانبك وكل من حولك يؤمن بك.", author: "صديقك" },
+  { text: "الفينيق لا يموت — يُولد من جديد أقوى. هذا أنت يا phinix!", author: "الأسطورة" },
+  { text: "الشخص الذي يتحرك الجبل يبدأ بنقل الحجارة الصغيرة.", author: "مثل صيني" },
+  { text: "معاً باللو و phinix — لا يوجد سؤال يقدر عليكم يوم الامتحان!", author: "صديقكم" },
+  { text: "حلمك لن يتحقق بدون عمل. اجمع بين الطموح والعمل الجاد.", author: "مجهول" },
+];
+
+let quoteIdx = 0;
+
+function rotateQuote() {
+  quoteIdx = (quoteIdx + 1) % quotes.length;
+  const qEl = document.getElementById('quote-text');
+  const aEl = document.getElementById('quote-author');
+  qEl.classList.add('changing');
+  setTimeout(() => {
+    qEl.textContent = quotes[quoteIdx].text;
+    aEl.textContent = '— ' + quotes[quoteIdx].author;
+    qEl.classList.remove('changing');
+  }, 500);
+}
+
+setInterval(rotateQuote, 5000);
+
+// ===== TIP CARDS REVEAL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 120);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.tip-card').forEach(card => observer.observe(card));
+
+// ===== FIREWORKS =====
+const fCanvas = document.getElementById('fireworks-canvas');
+const fCtx = fCanvas.getContext('2d');
+let particles = [];
+
+function resireFW() {
+  fCanvas.width = window.innerWidth;
+  fCanvas.height = window.innerHeight;
+}
+resireFW();
+window.addEventListener('resize', resireFW);
+
+class FWParticle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 8 + 2;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.alpha = 1;
+    this.decay = Math.random() * 0.02 + 0.01;
+    this.radius = Math.random() * 3 + 1;
+    this.gravity = 0.12;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.vy += this.gravity;
+    this.vx *= 0.98;
+    this.alpha -= this.decay;
+  }
+  draw() {
+    fCtx.save();
+    fCtx.globalAlpha = this.alpha;
+    fCtx.beginPath();
+    fCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    fCtx.fillStyle = this.color;
+    fCtx.fill();
+    fCtx.restore();
+  }
+}
+
+function burst(x, y) {
+  const colors = ['#f5c842','#ff6b6b','#6c63ff','#00d2ff','#ff9f43','#fff','#a29bfe','#fd79a8'];
+  for (let i = 0; i < 80; i++) {
+    particles.push(new FWParticle(x, y, colors[Math.floor(Math.random() * colors.length)]));
+  }
+}
+
+let fwRunning = false;
+function animFW() {
+  fCtx.clearRect(0, 0, fCanvas.width, fCanvas.height);
+  particles = particles.filter(p => p.alpha > 0.01);
+  particles.forEach(p => { p.update(); p.draw(); });
+  if (fwRunning || particles.length > 0) requestAnimationFrame(animFW);
+}
+
+let fwTimer;
+function launchFireworks() {
+  fwRunning = true;
+  animFW();
+  let launches = 0;
+  const doLaunch = () => {
+    if (launches >= 20) { fwRunning = false; return; }
+    burst(
+      Math.random() * fCanvas.width * 0.8 + fCanvas.width * 0.1,
+      Math.random() * fCanvas.height * 0.5 + 50
+    );
+    launches++;
+    setTimeout(doLaunch, 250);
+  };
+  doLaunch();
+}
+
+// ===== FLOATING PARTICLES =====
+function createParticles() {
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 6 + 2;
+    p.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      left: ${Math.random() * 100}vw;
+      background: ${Math.random() > 0.33 ? '#f5c842' : Math.random() > 0.5 ? '#ff4e00' : '#6c63ff'};
+      opacity: ${Math.random() * 0.4 + 0.1};
+      animation-duration: ${Math.random() * 15 + 10}s;
+      animation-delay: ${Math.random() * 10}s;
+    `;
+    document.body.appendChild(p);
+  }
+}
+createParticles();
+</script>
+</body>
+</html>
